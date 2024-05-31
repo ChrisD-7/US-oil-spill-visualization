@@ -1,0 +1,1283 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{us\_oil\_spill}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{data-loading-eda}{%
+\subsection{Data loading \& EDA}\label{data-loading-eda}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{pip} \PY{n}{install} \PY{n}{pydeck}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Collecting pydeck
+  Downloading pydeck-0.9.1-py2.py3-none-any.whl (6.9 MB)
+     \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{6.9/6.9 MB}
+\textcolor{ansi-red}{14.5 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+Requirement already satisfied: jinja2>=2.10.1 in
+/usr/local/lib/python3.10/dist-packages (from pydeck) (3.1.4)
+Requirement already satisfied: numpy>=1.16.4 in /usr/local/lib/python3.10/dist-
+packages (from pydeck) (1.25.2)
+Requirement already satisfied: MarkupSafe>=2.0 in
+/usr/local/lib/python3.10/dist-packages (from jinja2>=2.10.1->pydeck) (2.1.5)
+Installing collected packages: pydeck
+Successfully installed pydeck-0.9.1
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{106}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{preprocessing} \PY{k+kn}{import} \PY{n}{StandardScaler}
+
+
+\PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{incidents.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{df}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{106}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+         id   open\_date                                               name  \textbackslash{}
+0     10431  2022-03-21  Tug Vessel Loses Power, Grounds, and Leaks Die{\ldots}
+1     10430  2022-03-17  Compromised Fuel Transfer Pipe Spills Oil into{\ldots}
+2     10429  2022-03-16  Floating Humpback Whale Carcass off of Carolin{\ldots}
+3     10428  2022-03-15  Containership Grounded off Gibson Island in Ch{\ldots}
+4     10426  2022-03-14  Oil Pipeline Discharge into Cahokia Canal, Edw{\ldots}
+{\ldots}     {\ldots}         {\ldots}                                                {\ldots}
+4205   6204  1968-06-13  World Glory; 65 miles ENE of Durban, South Africa
+4206   6203  1968-03-07    General Colocotronis; Eleuthera Island, Bahamas
+4207   6202  1968-03-03                 Ocean Eagle; San Juan, Puerto Rico
+4208   6201  1967-03-18                  Torrey Canyon; Lands End, England
+4209   6200  1957-03-29  Tampico Maru; Northern Baja California, about {\ldots}
+
+                                               location        lat  \textbackslash{}
+0                                Neva Strait, Sitka, AK  57.270000
+1                                            Oswego, NY  43.459410
+2                               Carolina Beach, NC, USA  34.031323
+3                                Gibson Island, MD, USA  39.070000
+4                      Cahokia Canal,  Edwardsville, IL  38.824034
+{\ldots}                                                 {\ldots}        {\ldots}
+4205               65 miles ENE of Durban, South Africa -29.633300
+4206                          Eleuthera Island, Bahamas  25.333300
+4207                              San Juan, Puerto Rico  18.483300
+4208                                 Lands End, England  50.050000
+4209  Northern Baja California, about 1 mile north o{\ldots}  31.333300
+
+             lon threat tags  \textbackslash{}
+0    -135.593330    Oil  NaN
+1     -76.531650    Oil  NaN
+2     -77.830343  Other  NaN
+3     -76.410000    Oil  NaN
+4     -89.974600    Oil  NaN
+{\ldots}          {\ldots}    {\ldots}  {\ldots}
+4205   32.250000    NaN  NaN
+4206  -76.333300    NaN  NaN
+4207  -66.166700    NaN  NaN
+4208   -4.733330    NaN  NaN
+4209 -116.467000    NaN  NaN
+
+                                              commodity  measure\_skim  \textbackslash{}
+0                                                   NaN           NaN
+1                                                   NaN           NaN
+2                                                   NaN           NaN
+3                                                   NaN           NaN
+4                                                   NaN           NaN
+{\ldots}                                                 {\ldots}           {\ldots}
+4205                                   Kuwait crude oil           NaN
+4206                  Venezuelan crude oil, diesel fuel           NaN
+4207                         Venezuelan light crude oil           NaN
+4208                                   Kuwait crude oil           NaN
+4209  diesel oil - approx. 80\% heavy distillate, 20\%{\ldots}           NaN
+
+      measure\_shore  measure\_bio  measure\_disperse  measure\_burn  \textbackslash{}
+0               NaN          NaN               NaN           NaN
+1               NaN          NaN               NaN           NaN
+2               NaN          NaN               NaN           NaN
+3               NaN          NaN               NaN           NaN
+4               NaN          NaN               NaN           NaN
+{\ldots}             {\ldots}          {\ldots}               {\ldots}           {\ldots}
+4205            NaN          NaN               1.0           NaN
+4206            NaN          NaN               1.0           1.0
+4207            NaN          NaN               1.0           NaN
+4208            NaN          NaN               1.0           1.0
+4209            NaN          NaN               NaN           NaN
+
+      max\_ptl\_release\_gallons  posts  \textbackslash{}
+0                         NaN      0
+1                         NaN      0
+2                         NaN      0
+3                         NaN      2
+4                         NaN      0
+{\ldots}                       {\ldots}    {\ldots}
+4205               14000000.0      6
+4206                1550000.0      6
+4207                2940000.0     15
+4208               36100000.0      5
+4209                      NaN      5
+
+                                            description
+0     At approximately 0400 on 21-Mar02922, the tug {\ldots}
+1     On March 17, 2022, NOAA ERD was notified by Mi{\ldots}
+2     On March 16, 2022, the Gulf of Mexico Marine M{\ldots}
+3     On 15 March 2022, USCG Sector Maryland NCR not{\ldots}
+4     On March 14, 2022, USEPA Region 5 contacted th{\ldots}
+{\ldots}                                                 {\ldots}
+4205  At 1500 on June 13, 1968, the World Glory,  bo{\ldots}
+4206  On March 7, 1968, the Greek tank vessel Genera{\ldots}
+4207  On the morning of March 3, 1968, the tanker Oc{\ldots}
+4208  On the morning of March 18, 1967, the T/V Torr{\ldots}
+4209  The Tampico Maru  (henceforth Tampico) left Lo{\ldots}
+
+[4210 rows x 17 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{74}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{74}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+      id   open\_date                                               name  \textbackslash{}
+0  10431  2022-03-21  Tug Vessel Loses Power, Grounds, and Leaks Die{\ldots}
+1  10430  2022-03-17  Compromised Fuel Transfer Pipe Spills Oil into{\ldots}
+2  10429  2022-03-16  Floating Humpback Whale Carcass off of Carolin{\ldots}
+
+                  location        lat         lon threat tags commodity  \textbackslash{}
+0   Neva Strait, Sitka, AK  57.270000 -135.593330    Oil  NaN       NaN
+1               Oswego, NY  43.459410  -76.531650    Oil  NaN       NaN
+2  Carolina Beach, NC, USA  34.031323  -77.830343  Other  NaN       NaN
+
+   measure\_skim  measure\_shore  measure\_bio  measure\_disperse  measure\_burn  \textbackslash{}
+0           NaN            NaN          NaN               NaN           NaN
+1           NaN            NaN          NaN               NaN           NaN
+2           NaN            NaN          NaN               NaN           NaN
+
+   max\_ptl\_release\_gallons  posts  \textbackslash{}
+0                      NaN      0
+1                      NaN      0
+2                      NaN      0
+
+                                         description
+0  At approximately 0400 on 21-Mar02922, the tug {\ldots}
+1  On March 17, 2022, NOAA ERD was notified by Mi{\ldots}
+2  On March 16, 2022, the Gulf of Mexico Marine M{\ldots}
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{75}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 4210 entries, 0 to 4209
+Data columns (total 17 columns):
+ \#   Column                   Non-Null Count  Dtype
+---  ------                   --------------  -----
+ 0   id                       4210 non-null   int64
+ 1   open\_date                4210 non-null   object
+ 2   name                     4210 non-null   object
+ 3   location                 4208 non-null   object
+ 4   lat                      4210 non-null   float64
+ 5   lon                      4210 non-null   float64
+ 6   threat                   2870 non-null   object
+ 7   tags                     811 non-null    object
+ 8   commodity                3392 non-null   object
+ 9   measure\_skim             295 non-null    float64
+ 10  measure\_shore            211 non-null    float64
+ 11  measure\_bio              30 non-null     float64
+ 12  measure\_disperse         91 non-null     float64
+ 13  measure\_burn             67 non-null     float64
+ 14  max\_ptl\_release\_gallons  2269 non-null   float64
+ 15  posts                    4210 non-null   int64
+ 16  description              4208 non-null   object
+dtypes: float64(8), int64(2), object(7)
+memory usage: 559.3+ KB
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{76}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{76}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+id                            0
+open\_date                     0
+name                          0
+location                      2
+lat                           0
+lon                           0
+threat                     1340
+tags                       3399
+commodity                   818
+measure\_skim               3915
+measure\_shore              3999
+measure\_bio                4180
+measure\_disperse           4119
+measure\_burn               4143
+max\_ptl\_release\_gallons    1941
+posts                         0
+description                   2
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{77}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}now since working with log and lat data (location) we need this for our map visulization so lets drop the ones that are empty}
+
+\PY{n}{df}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lon}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{77}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+         id   open\_date                                               name  \textbackslash{}
+0     10431  2022-03-21  Tug Vessel Loses Power, Grounds, and Leaks Die{\ldots}
+1     10430  2022-03-17  Compromised Fuel Transfer Pipe Spills Oil into{\ldots}
+2     10429  2022-03-16  Floating Humpback Whale Carcass off of Carolin{\ldots}
+3     10428  2022-03-15  Containership Grounded off Gibson Island in Ch{\ldots}
+4     10426  2022-03-14  Oil Pipeline Discharge into Cahokia Canal, Edw{\ldots}
+{\ldots}     {\ldots}         {\ldots}                                                {\ldots}
+4205   6204  1968-06-13  World Glory; 65 miles ENE of Durban, South Africa
+4206   6203  1968-03-07    General Colocotronis; Eleuthera Island, Bahamas
+4207   6202  1968-03-03                 Ocean Eagle; San Juan, Puerto Rico
+4208   6201  1967-03-18                  Torrey Canyon; Lands End, England
+4209   6200  1957-03-29  Tampico Maru; Northern Baja California, about {\ldots}
+
+                                               location        lat  \textbackslash{}
+0                                Neva Strait, Sitka, AK  57.270000
+1                                            Oswego, NY  43.459410
+2                               Carolina Beach, NC, USA  34.031323
+3                                Gibson Island, MD, USA  39.070000
+4                      Cahokia Canal,  Edwardsville, IL  38.824034
+{\ldots}                                                 {\ldots}        {\ldots}
+4205               65 miles ENE of Durban, South Africa -29.633300
+4206                          Eleuthera Island, Bahamas  25.333300
+4207                              San Juan, Puerto Rico  18.483300
+4208                                 Lands End, England  50.050000
+4209  Northern Baja California, about 1 mile north o{\ldots}  31.333300
+
+             lon threat tags  \textbackslash{}
+0    -135.593330    Oil  NaN
+1     -76.531650    Oil  NaN
+2     -77.830343  Other  NaN
+3     -76.410000    Oil  NaN
+4     -89.974600    Oil  NaN
+{\ldots}          {\ldots}    {\ldots}  {\ldots}
+4205   32.250000    NaN  NaN
+4206  -76.333300    NaN  NaN
+4207  -66.166700    NaN  NaN
+4208   -4.733330    NaN  NaN
+4209 -116.467000    NaN  NaN
+
+                                              commodity  measure\_skim  \textbackslash{}
+0                                                   NaN           NaN
+1                                                   NaN           NaN
+2                                                   NaN           NaN
+3                                                   NaN           NaN
+4                                                   NaN           NaN
+{\ldots}                                                 {\ldots}           {\ldots}
+4205                                   Kuwait crude oil           NaN
+4206                  Venezuelan crude oil, diesel fuel           NaN
+4207                         Venezuelan light crude oil           NaN
+4208                                   Kuwait crude oil           NaN
+4209  diesel oil - approx. 80\% heavy distillate, 20\%{\ldots}           NaN
+
+      measure\_shore  measure\_bio  measure\_disperse  measure\_burn  \textbackslash{}
+0               NaN          NaN               NaN           NaN
+1               NaN          NaN               NaN           NaN
+2               NaN          NaN               NaN           NaN
+3               NaN          NaN               NaN           NaN
+4               NaN          NaN               NaN           NaN
+{\ldots}             {\ldots}          {\ldots}               {\ldots}           {\ldots}
+4205            NaN          NaN               1.0           NaN
+4206            NaN          NaN               1.0           1.0
+4207            NaN          NaN               1.0           NaN
+4208            NaN          NaN               1.0           1.0
+4209            NaN          NaN               NaN           NaN
+
+      max\_ptl\_release\_gallons  posts  \textbackslash{}
+0                         NaN      0
+1                         NaN      0
+2                         NaN      0
+3                         NaN      2
+4                         NaN      0
+{\ldots}                       {\ldots}    {\ldots}
+4205               14000000.0      6
+4206                1550000.0      6
+4207                2940000.0     15
+4208               36100000.0      5
+4209                      NaN      5
+
+                                            description
+0     At approximately 0400 on 21-Mar02922, the tug {\ldots}
+1     On March 17, 2022, NOAA ERD was notified by Mi{\ldots}
+2     On March 16, 2022, the Gulf of Mexico Marine M{\ldots}
+3     On 15 March 2022, USCG Sector Maryland NCR not{\ldots}
+4     On March 14, 2022, USEPA Region 5 contacted th{\ldots}
+{\ldots}                                                 {\ldots}
+4205  At 1500 on June 13, 1968, the World Glory,  bo{\ldots}
+4206  On March 7, 1968, the Greek tank vessel Genera{\ldots}
+4207  On the morning of March 3, 1968, the tanker Oc{\ldots}
+4208  On the morning of March 18, 1967, the T/V Torr{\ldots}
+4209  The Tampico Maru  (henceforth Tampico) left Lo{\ldots}
+
+[4210 rows x 17 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{78}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} now lets also convert the date time from open\PYZus{}date to datetime}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{open\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{open\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{79}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} and the missing values in threat can be then replaced with \PYZsq{}unknown\PYZsq{}}
+
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{threat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{threat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Unknown}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{80}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} filling missing values in the \PYZsq{}commodity\PYZsq{}, \PYZsq{}location\PYZsq{} and \PYZsq{}description\PYZsq{} with a placeholder for our purpouse}
+
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{location}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{location}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Unknown Location}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{description}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{description}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No description available}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{commodity}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{commodity}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Unknown}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tags}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tags}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No tags}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{81}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} now lets fill the missing boleen values with 0 taking it as a base}
+
+\PY{n}{boolean\PYZus{}columns} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{measure\PYZus{}skim}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{measure\PYZus{}shore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{measure\PYZus{}bio}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{measure\PYZus{}disperse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{measure\PYZus{}burn}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{df}\PY{p}{[}\PY{n}{boolean\PYZus{}columns}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{n}{boolean\PYZus{}columns}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{82}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{i wanted to fill the data for the max\PYZus{}ptl\PYZus{}release\PYZus{}gallons and for this lets}
+\PY{l+s+sd}{initially plot the distrubution to know how the data is skewed}
+\PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+
+
+\PY{c+c1}{\PYZsh{} distribution of \PYZsq{}max\PYZus{}ptl\PYZus{}release\PYZus{}gallons\PYZsq{}}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{histplot}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{max\PYZus{}ptl\PYZus{}release\PYZus{}gallons}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{,} \PY{n}{kde}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Distribution of Max Potential Release (Gallons)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Max Potential Release (Gallons)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Frequency}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{us_oil_spill_files/us_oil_spill_11_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{83}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} now we can see our data is highly skewed with most values to the lower end.}
+
+\PY{c+c1}{\PYZsh{}given this lets go with median imputation}
+
+\PY{c+c1}{\PYZsh{} Fill missing \PYZsq{}max\PYZus{}ptl\PYZus{}release\PYZus{}gallons\PYZsq{} with the median value}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{max\PYZus{}ptl\PYZus{}release\PYZus{}gallons}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{max\PYZus{}ptl\PYZus{}release\PYZus{}gallons}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{max\PYZus{}ptl\PYZus{}release\PYZus{}gallons}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{median}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Verify cleaning}
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{83}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+id                         0
+open\_date                  0
+name                       0
+location                   0
+lat                        0
+lon                        0
+threat                     0
+tags                       0
+commodity                  0
+measure\_skim               0
+measure\_shore              0
+measure\_bio                0
+measure\_disperse           0
+measure\_burn               0
+max\_ptl\_release\_gallons    0
+posts                      0
+description                0
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{84}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} now lets get the basic statistics of our dataset}
+
+\PY{c+c1}{\PYZsh{} Summary statistics}
+\PY{n}{df}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{84}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                 id                      open\_date          lat          lon  \textbackslash{}
+count   4210.000000                           4210  4210.000000  4210.000000
+mean    7741.086698  2005-04-28 01:55:57.149643648    36.335721   -94.727658
+min     1004.000000            1957-03-29 00:00:00   -78.000000  -197.050000
+25\%     6830.250000            1994-11-16 00:00:00    29.318749  -122.000000
+50\%     7903.500000            2007-11-07 12:00:00    35.786406   -89.968611
+75\%     9302.750000            2016-06-14 18:00:00    42.236950   -76.705300
+max    10431.000000            2022-03-21 00:00:00    71.800000   182.600000
+std     2139.334904                            NaN    11.794040    39.767888
+
+       measure\_skim  measure\_shore  measure\_bio  measure\_disperse  \textbackslash{}
+count   4210.000000    4210.000000  4210.000000       4210.000000
+mean       0.058907       0.042280     0.004276          0.017102
+min        0.000000       0.000000     0.000000          0.000000
+25\%        0.000000       0.000000     0.000000          0.000000
+50\%        0.000000       0.000000     0.000000          0.000000
+75\%        0.000000       0.000000     0.000000          0.000000
+max        1.000000       1.000000     1.000000          1.000000
+std        0.235479       0.201252     0.065255          0.129667
+
+       measure\_burn  max\_ptl\_release\_gallons        posts
+count   4210.000000             4.210000e+03  4210.000000
+mean       0.011639             5.693743e+05     6.093349
+min        0.000000             0.000000e+00     0.000000
+25\%        0.000000             3.000000e+03     0.000000
+50\%        0.000000             4.000000e+03     2.000000
+75\%        0.000000             5.000000e+03     6.000000
+max        1.000000             3.360000e+08   380.000000
+std        0.107267             7.141352e+06    18.523449
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{85}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Count of incidents by threat type}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{threat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{85}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+threat
+Oil         2344
+Unknown     1340
+Chemical     276
+Other        250
+Name: count, dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{86}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Count of incidents by year}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{open\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{year}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+year
+2017    197
+2008    192
+2016    190
+2020    187
+2019    181
+2018    180
+2009    177
+2021    173
+1986    169
+2015    154
+1985    146
+2007    131
+2014    128
+1998    117
+1988    107
+2003    105
+1987    102
+1994    102
+2006     99
+2004     96
+1989     94
+2013     92
+2012     90
+2005     89
+1999     84
+1997     83
+2000     82
+1991     80
+2001     65
+1996     61
+1993     60
+2010     59
+1992     58
+2011     47
+1990     46
+1995     42
+1984     37
+2022     28
+2002     15
+1979      8
+1978      8
+1977      7
+1976      6
+1975      6
+1983      4
+1970      4
+1968      4
+1980      3
+1973      3
+1972      3
+1981      2
+1971      2
+1969      2
+1967      1
+1974      1
+1957      1
+Name: count, dtype: int64
+    \end{Verbatim}
+
+    \hypertarget{visulizations}{%
+\subsection{Visulizations}\label{visulizations}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{87}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Count of incidents by threat type}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{countplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{,} \PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{threat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{order}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{threat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{index}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xticks}\PY{p}{(}\PY{n}{rotation}\PY{o}{=}\PY{l+m+mi}{45}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Number of Incidents by Threat Type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{us_oil_spill_files/us_oil_spill_17_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Since our data was about oil spill it only makes sense that there are
+more cases of oil spil
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{88}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Count of incidents by year}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{open\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{dt}\PY{o}{.}\PY{n}{year}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{14}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{countplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{,} \PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{order}\PY{o}{=}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{index}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xticks}\PY{p}{(}\PY{n}{rotation}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Number of Incidents by Year}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{us_oil_spill_files/us_oil_spill_19_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    From this chart, we can observe trends over time.
+
+Here are some key points:
+
+\begin{itemize}
+\item
+  Peak Years: There is a noticeable peak in incidents during the years
+  2017, 2008, and 2016.
+\item
+  Recent Decline: The number of incidents appears to decline in recent
+  years, particularly after 2017.
+\item
+  Historical Data: There are fewer recorded incidents before the 1980s,
+  which could be due to less comprehensive reporting during those times.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{93}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} heatmap of the insidents}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{histplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{,} \PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lon}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{30}\PY{p}{,}\PY{n}{cbar}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Heatmap of Insident Locations}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{us_oil_spill_files/us_oil_spill_21_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    the heatmap has nonsensical values but i wont be getting into it for now
+as the main purpose is to visulize the data using
+\href{https://deckgl.readthedocs.io/en/latest/installation.html}{pydeck}
+
+we already have install pydeck in our notebook before using pip install
+\href{https://colab.research.google.com/drive/16bAu3IH70IMRwBIsg5qw8rhA-Px1HYQa?authuser=1\#scrollTo=Cc-D-yvAmLXU\&line=1\&uniqifier=1}{here}
+
+    \hypertarget{visulizations-using-pydeck}{%
+\subsection{Visulizations using
+pydeck}\label{visulizations-using-pydeck}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{97}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pydeck} \PY{k}{as} \PY{n+nn}{pdk}
+
+\PY{c+c1}{\PYZsh{} Basic scatter plot of all incidents}
+\PY{n}{layer} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{Layer}\PY{p}{(}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ScatterplotLayer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{,}
+    \PY{n}{get\PYZus{}position}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[lon, lat]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{get\PYZus{}radius}\PY{o}{=}\PY{l+m+mi}{50000}\PY{p}{,}
+    \PY{n}{get\PYZus{}color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[200, 30, 0, 160]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{pickable}\PY{o}{=}\PY{k+kc}{True}
+\PY{p}{)}
+
+\PY{n}{view\PYZus{}state} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{ViewState}\PY{p}{(}
+    \PY{n}{latitude}\PY{o}{=}\PY{l+m+mf}{37.7749}\PY{p}{,}
+    \PY{n}{longitude}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mf}{122.4194}\PY{p}{,}
+    \PY{n}{zoom}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,}
+    \PY{n}{pitch}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,}
+\PY{p}{)}
+
+\PY{n}{r} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{Deck}\PY{p}{(}\PY{n}{layers}\PY{o}{=}\PY{p}{[}\PY{n}{layer}\PY{p}{]}\PY{p}{,} \PY{n}{initial\PYZus{}view\PYZus{}state}\PY{o}{=}\PY{n}{view\PYZus{}state}\PY{p}{,} \PY{n}{tooltip}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{text}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}name\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+si}{\PYZob{}location\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+si}{\PYZob{}threat\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{r}\PY{o}{.}\PY{n}{to\PYZus{}html}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{incident\PYZus{}map.html}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<IPython.core.display.Javascript object>
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<IPython.core.display.HTML object>
+    \end{Verbatim}
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{99}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}heatmap of the insidents}
+
+\PY{n}{heatmap\PYZus{}layer} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{Layer}\PY{p}{(}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HeatmapLayer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{,}
+    \PY{n}{get\PYZus{}position}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[lon, lat]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{get\PYZus{}weight}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{max\PYZus{}ptl\PYZus{}release\PYZus{}gallons}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{radius\PYZus{}pixels}\PY{o}{=}\PY{l+m+mi}{60}
+\PY{p}{)}
+
+\PY{n}{heatmap\PYZus{}tooltip} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{text}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}name\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Location: }\PY{l+s+si}{\PYZob{}location\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Threat: }\PY{l+s+si}{\PYZob{}threat\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+\PY{n}{heatmap\PYZus{}deck} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{Deck}\PY{p}{(}\PY{n}{layers}\PY{o}{=}\PY{p}{[}\PY{n}{heatmap\PYZus{}layer}\PY{p}{]}\PY{p}{,} \PY{n}{initial\PYZus{}view\PYZus{}state}\PY{o}{=}\PY{n}{view\PYZus{}state}\PY{p}{,} \PY{n}{tooltip}\PY{o}{=}\PY{n}{heatmap\PYZus{}tooltip}\PY{p}{)}
+\PY{n}{heatmap\PYZus{}deck}\PY{o}{.}\PY{n}{to\PYZus{}html}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{incident\PYZus{}heatmap.html}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<IPython.core.display.Javascript object>
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<IPython.core.display.HTML object>
+    \end{Verbatim}
+
+    
+    Now when ploting the realease in gallons we need to make sure that the
+range is standardized as we also saw it initially when creating the plot
+of distribution.
+
+This is the only sklearn package that we will use in this project as of
+now
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{111}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} lets standardize the max\PYZus{}ptl\PYZus{}release\PYZus{}gallons}
+\PY{n}{scaler} \PY{o}{=} \PY{n}{StandardScaler}\PY{p}{(}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{scaled\PYZus{}release\PYZus{}gallons}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{scaler}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{max\PYZus{}ptl\PYZus{}release\PYZus{}gallons}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{100000}  \PY{c+c1}{\PYZsh{} we are multipying it to make sure that the radii is huge and we can see it in our plots}
+
+
+\PY{c+c1}{\PYZsh{}adjust the magnifying factor for better plots as needed}
+
+\PY{c+c1}{\PYZsh{} Define the PyDeck scatter plot layer}
+\PY{n}{impact\PYZus{}layer} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{Layer}\PY{p}{(}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ScatterplotLayer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{,}
+    \PY{n}{get\PYZus{}position}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[lon, lat]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{get\PYZus{}radius}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{scaled\PYZus{}release\PYZus{}gallons}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{get\PYZus{}color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[200, 30, 0, 160]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{pickable}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}
+    \PY{n}{auto\PYZus{}highlight}\PY{o}{=}\PY{k+kc}{True}
+\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Define the initial view state}
+\PY{n}{view\PYZus{}state} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{ViewState}\PY{p}{(}
+    \PY{n}{latitude}\PY{o}{=}\PY{l+m+mf}{37.7749}\PY{p}{,}
+    \PY{n}{longitude}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mf}{122.4194}\PY{p}{,}
+    \PY{n}{zoom}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,}
+    \PY{n}{pitch}\PY{o}{=}\PY{l+m+mi}{50}
+\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Create the PyDeck deck}
+\PY{n}{impact\PYZus{}tooltip} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{text}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}name\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Location: }\PY{l+s+si}{\PYZob{}location\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Threat: }\PY{l+s+si}{\PYZob{}threat\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+\PY{n}{impact\PYZus{}deck} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{Deck}\PY{p}{(}\PY{n}{layers}\PY{o}{=}\PY{p}{[}\PY{n}{impact\PYZus{}layer}\PY{p}{]}\PY{p}{,} \PY{n}{initial\PYZus{}view\PYZus{}state}\PY{o}{=}\PY{n}{view\PYZus{}state}\PY{p}{,} \PY{n}{tooltip}\PY{o}{=}\PY{n}{impact\PYZus{}tooltip}\PY{p}{)}
+\PY{n}{impact\PYZus{}deck}\PY{o}{.}\PY{n}{to\PYZus{}html}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{incident\PYZus{}impact.html}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<IPython.core.display.Javascript object>
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<IPython.core.display.HTML object>
+    \end{Verbatim}
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{112}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} even though this was supposed to be a threat specific to oil lets do a threat analysis}
+
+\PY{k}{def} \PY{n+nf}{get\PYZus{}threat\PYZus{}color}\PY{p}{(}\PY{n}{threat}\PY{p}{)}\PY{p}{:}
+    \PY{n}{colors} \PY{o}{=} \PY{p}{\PYZob{}}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Oil}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+m+mi}{255}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Chemical}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{255}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Other}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{255}\PY{p}{]}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Unknown}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+m+mi}{128}\PY{p}{,} \PY{l+m+mi}{128}\PY{p}{,} \PY{l+m+mi}{128}\PY{p}{]}
+    \PY{p}{\PYZcb{}}
+    \PY{k}{return} \PY{n}{colors}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{n}{threat}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{128}\PY{p}{,} \PY{l+m+mi}{128}\PY{p}{,} \PY{l+m+mi}{128}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{threat\PYZus{}color}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{threat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{get\PYZus{}threat\PYZus{}color}\PY{p}{)}
+
+\PY{n}{threat\PYZus{}layer} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{Layer}\PY{p}{(}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ScatterplotLayer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{,}
+    \PY{n}{get\PYZus{}position}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[lon, lat]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{get\PYZus{}fill\PYZus{}color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[threat\PYZus{}color[0], threat\PYZus{}color[1], threat\PYZus{}color[2], 150]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{get\PYZus{}radius}\PY{o}{=}\PY{l+m+mi}{50000}\PY{p}{,}
+    \PY{n}{pickable}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}
+    \PY{n}{auto\PYZus{}highlight}\PY{o}{=}\PY{k+kc}{True}
+\PY{p}{)}
+
+\PY{n}{threat\PYZus{}tooltip} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{text}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}name\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Location: }\PY{l+s+si}{\PYZob{}location\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Threat: }\PY{l+s+si}{\PYZob{}threat\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+\PY{n}{threat\PYZus{}deck} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{Deck}\PY{p}{(}\PY{n}{layers}\PY{o}{=}\PY{p}{[}\PY{n}{threat\PYZus{}layer}\PY{p}{]}\PY{p}{,} \PY{n}{initial\PYZus{}view\PYZus{}state}\PY{o}{=}\PY{n}{view\PYZus{}state}\PY{p}{,} \PY{n}{tooltip}\PY{o}{=}\PY{n}{threat\PYZus{}tooltip}\PY{p}{)}
+\PY{n}{threat\PYZus{}deck}\PY{o}{.}\PY{n}{to\PYZus{}html}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{threat\PYZus{}specific.html}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<IPython.core.display.Javascript object>
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<IPython.core.display.HTML object>
+    \end{Verbatim}
+
+    
+    I am an NLP enthusiast but I am really holding myself back how ever we
+can perform NER or train the model to identfiy the keyterms from the
+description and label the unknown data as well.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{117}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{timestamp}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{open\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{9}
+
+\PY{n}{time\PYZus{}layer} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{Layer}\PY{p}{(}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ScatterplotLayer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{,}
+    \PY{n}{get\PYZus{}position}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[lon, lat]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{get\PYZus{}radius}\PY{o}{=}\PY{l+m+mi}{50000}\PY{p}{,}
+    \PY{n}{get\PYZus{}fill\PYZus{}color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[200, 30, 0, 160]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{pickable}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}
+    \PY{n}{auto\PYZus{}highlight}\PY{o}{=}\PY{k+kc}{True}
+\PY{p}{)}
+
+\PY{n}{time\PYZus{}deck} \PY{o}{=} \PY{n}{pdk}\PY{o}{.}\PY{n}{Deck}\PY{p}{(}\PY{n}{layers}\PY{o}{=}\PY{p}{[}\PY{n}{time\PYZus{}layer}\PY{p}{]}\PY{p}{,} \PY{n}{initial\PYZus{}view\PYZus{}state}\PY{o}{=}\PY{n}{view\PYZus{}state}\PY{p}{,} \PY{n}{tooltip}\PY{o}{=}\PY{n}{heatmap\PYZus{}tooltip}\PY{p}{)}
+\PY{n}{time\PYZus{}deck}\PY{o}{.}\PY{n}{update\PYZus{}trailing\PYZus{}animation} \PY{o}{=} \PY{k+kc}{True}
+\PY{n}{time\PYZus{}deck}\PY{o}{.}\PY{n}{to\PYZus{}html}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{time\PYZus{}based\PYZus{}animation.html}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<IPython.core.display.Javascript object>
+    \end{Verbatim}
+
+    
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+<IPython.core.display.HTML object>
+    \end{Verbatim}
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
