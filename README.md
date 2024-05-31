@@ -46,23 +46,14 @@ The dataset comprises oil spill incidents off US coastal waters where NOAA's Off
   - Various PNG and HTML files used for visualizations.
 
 ## Installation
-To install the required packages, create a virtual environment and install the dependencies listed in `requirements.txt`:
+To install the required packages, install the dependencies listed in `requirements.txt`:
 
 ```sh
-# Create a virtual environment
-python -m venv env
-
-# Activate the virtual environment
-# On Windows
-.\env\Scripts\activate
-# On macOS/Linux
-source env/bin/activate
-
 # Install the required packages
 pip install -r requirements.txt
 ```
 
-### `requirements.txt`
+### requirements.txt
 ```text
 pandas
 pydeck
@@ -80,6 +71,8 @@ To run the Jupyter Notebooks, navigate to the `jupyter_notebook` directory and s
 jupyter lab
 # or
 jupyter notebook
+#or 
+google colab with the second file
 ```
 
 Open `us_oil_spill.ipynb` to explore the analysis and visualizations.
@@ -110,5 +103,4 @@ Contributions are welcome. Please fork the repository, make your changes, and su
 - [PyDeck Example on Kaggle](https://www.kaggle.com/code/jeongbinpark/visualization-3d-map-using-pydeck)
 - [Kaggle Dataset](https://www.kaggle.com/datasets/kkhandekar/oil-spills-off-us-coastal-waters/data)
 
-## License
-This project is licensed under the MIT License. See the `LICENSE` file for more details.
+[Final App](https://chris-dsilva-us-oil-spill-visualization.streamlit.app/)
