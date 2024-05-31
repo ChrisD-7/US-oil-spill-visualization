@@ -41,13 +41,6 @@ To run the project, install the following packages:
 pip install pandas matplotlib seaborn scikit-learn pydeck 
 ```
 
-## Running the Streamlit Application
-
-Save the following script as `app.py` and run it using:
-```bash
-streamlit run app.py
-```
-
 ## Contributing
 
 Contributions are welcome. Please fork the repository, make your changes, and submit a pull request. For major changes, open an issue to discuss what you would like to change.
