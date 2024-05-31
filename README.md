@@ -6,7 +6,6 @@ This project creates an interactive visualization of oil spill incidents using P
 
 The project explores and visualizes oil spill incidents using PyDeck for map-based visualizations and Streamlit for interactive web applications. It covers data loading, cleaning, exploratory data analysis (EDA), and creating various visualizations including scatter plots, heatmaps, impact analysis, threat-specific analysis, and time-based animations.
 
-
 ## Data Collection
 
 The dataset comprises oil spill incidents off US coastal waters where NOAA's Office of Response and Restoration (OR&R) provided scientific support for the spill response. The dataset includes features such as incident name, location, latitude, longitude, threat type, commodity spilled, and various response measures.
@@ -34,18 +33,82 @@ The dataset comprises oil spill incidents off US coastal waters where NOAA's Off
 3. **Impact Analysis**: Highlights incidents based on the standardized potential release in gallons.
 4. **Threat-Specific Analysis**: Differentiates incidents by threat type using color coding.
 
-## Requirements
+## Project Structure
+- `dataset/`: Contains the dataset used in the project.
+  - `incidents.csv`: Dataset of oil spill incidents.
+- `jupyter_notebook/`: Contains Jupyter Notebooks for data analysis and visualization.
+  - `us_oil_spill.ipynb`: Notebook with analysis and visualizations.
+  - `us_oil_spill.html`: HTML export of the Jupyter Notebook.
+- `streamlit/`: Contains the Streamlit web application.
+  - `app.py`: Streamlit app script.
+  - `streamlit_oil_spill.ipynb`: Notebook associated with the Streamlit app.
+- `us_oil_spill_files/`: Contains additional files for visualizations.
+  - Various PNG and HTML files used for visualizations.
 
-To run the project, install the following packages:
-```bash
-pip install pandas matplotlib seaborn scikit-learn pydeck 
+## Installation
+To install the required packages, create a virtual environment and install the dependencies listed in `requirements.txt`:
+
+```sh
+# Create a virtual environment
+python -m venv env
+
+# Activate the virtual environment
+# On Windows
+.\env\Scripts\activate
+# On macOS/Linux
+source env/bin/activate
+
+# Install the required packages
+pip install -r requirements.txt
 ```
 
-## Contributing
+### `requirements.txt`
+```text
+pandas
+pydeck
+matplotlib
+seaborn
+scikit-learn
+```
 
+## Usage
+
+### Jupyter Notebooks
+To run the Jupyter Notebooks, navigate to the `jupyter_notebook` directory and start Jupyter Lab or Notebook:
+
+```sh
+jupyter lab
+# or
+jupyter notebook
+```
+
+Open `us_oil_spill.ipynb` to explore the analysis and visualizations.
+
+### Streamlit App
+To run the Streamlit app, navigate to the `streamlit` directory and run the Streamlit command:
+
+```sh
+streamlit run app.py
+```
+
+This will start a local server, and you can view the app in your web browser.
+
+## Data
+The dataset used in this project (`incidents.csv`) contains information about oil spill incidents in the US. The data includes details such as location, date, impact, and cause of the incidents.
+
+## Visualizations
+The project includes various visualizations to explore the oil spill incidents:
+
+- **Interactive Maps (PyDeck)**: Visualize the geographic distribution of incidents.
+- **Heatmaps and Statistical Graphs (Matplotlib & Seaborn)**: Highlight areas with a high concentration of incidents and show statistical data.
+
+## Contributing
 Contributions are welcome. Please fork the repository, make your changes, and submit a pull request. For major changes, open an issue to discuss what you would like to change.
 
 ## References
 
 - [PyDeck Example on Kaggle](https://www.kaggle.com/code/jeongbinpark/visualization-3d-map-using-pydeck)
 - [Kaggle Dataset](https://www.kaggle.com/datasets/kkhandekar/oil-spills-off-us-coastal-waters/data)
+
+## License
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
