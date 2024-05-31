@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 import io
 
 # Load the dataset
-df = pd.read_csv('incidents.csv') # make sure to link the dataset perfectly
+df = pd.read_csv('C:/Users/chris/OneDrive/Desktop/Github/US-oil-spill-visualization/dataset/incidents.csv') # make sure to link the dataset perfectly
 
 # Data cleaning steps
 df['open_date'] = pd.to_datetime(df['open_date'])
