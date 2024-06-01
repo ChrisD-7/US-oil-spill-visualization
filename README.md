@@ -103,4 +103,7 @@ Contributions are welcome. Please fork the repository, make your changes, and su
 - [PyDeck Example on Kaggle](https://www.kaggle.com/code/jeongbinpark/visualization-3d-map-using-pydeck)
 - [Kaggle Dataset](https://www.kaggle.com/datasets/kkhandekar/oil-spills-off-us-coastal-waters/data)
 
-[Final App](https://chris-dsilva-us-oil-spill-visualization.streamlit.app/)
+## [Streamlit App](https://chris-dsilva-us-oil-spill-visualization.streamlit.app/)
+
+
+![alt text](video_demo/streamlit-app-demo-ezgif.com-video-to-gif-converter.gif)
