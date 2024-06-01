@@ -85,7 +85,7 @@ if option == 'Geospatial Visualization':
     year_range = st.slider('Select Year Range', min_year, max_year, (min_year, max_year))
 
     # Filter dataset based on selected year range
-    df_filtered = df[(df['year'] >= year_range[0]) && (df['year'] <= year_range[1])]
+    df_filtered = df[(df['year'] >= year_range[0]) & (df['year'] <= year_range[1])]
 
     # Scatter plot of all incidents
     scatter_layer = pdk.Layer(
