@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 import io
 
 # Load the dataset
-df = pd.read_csv('dataset/incidents.csv') # make sure to link the dataset perfectly
+df = pd.read_csv('dataset/incidents.csv')  # make sure to link the dataset perfectly
 
 # Data cleaning steps
 df['open_date'] = pd.to_datetime(df['open_date'])
@@ -80,10 +79,18 @@ if option == 'Geospatial Visualization':
     st.header('Geospatial Visualization')
     st.write("This section provides geospatial visualizations of the incidents, including scatter plots and heatmaps, to show the geographical distribution of incidents.")
 
+    # Add slider for selecting year range
+    min_year = int(df['year'].min())
+    max_year = int(df['year'].max())
+    year_range = st.slider('Select Year Range', min_year, max_year, (min_year, max_year))
+
+    # Filter dataset based on selected year range
+    df_filtered = df[(df['year'] >= year_range[0]) && (df['year'] <= year_range[1])]
+
     # Scatter plot of all incidents
     scatter_layer = pdk.Layer(
         'ScatterplotLayer',
-        data=df,
+        data=df_filtered,
         get_position='[lon, lat]',
         get_radius=50000,
         get_color='[200, 30, 0, 160]',
@@ -93,7 +100,7 @@ if option == 'Geospatial Visualization':
     # Heatmap of incidents
     heatmap_layer = pdk.Layer(
         'HeatmapLayer',
-        data=df,
+        data=df_filtered,
         get_position='[lon, lat]',
         get_weight='max_ptl_release_gallons',
         radius_pixels=60
@@ -101,10 +108,10 @@ if option == 'Geospatial Visualization':
 
     # Impact analysis
     scaler = StandardScaler()
-    df['scaled_release_gallons'] = scaler.fit_transform(df[['max_ptl_release_gallons']]) * 10000 #adjust to make the visulizations better
+    df_filtered['scaled_release_gallons'] = scaler.fit_transform(df_filtered[['max_ptl_release_gallons']]) * 10000 #adjust to make the visualizations better
     impact_layer = pdk.Layer(
         'ScatterplotLayer',
-        data=df,
+        data=df_filtered,
         get_position='[lon, lat]',
         get_radius='scaled_release_gallons',
         get_color='[200, 30, 0, 160]',
@@ -129,7 +136,7 @@ if option == 'Geospatial Visualization':
         }
         return colors.get(threat, [128, 128, 128])
 
-    df['threat_color'] = df['threat'].apply(get_threat_color)
+    df_filtered['threat_color'] = df_filtered['threat'].apply(get_threat_color)
 
     map_type = st.selectbox("Select Map Type", ["Scatter Plot", "Heatmap", "Impact Analysis", "Threat Analysis"])
 
@@ -141,10 +148,10 @@ if option == 'Geospatial Visualization':
         st.pydeck_chart(pdk.Deck(layers=[impact_layer], initial_view_state=view_state, width=800, height=600))
     elif map_type == "Threat Analysis":
         st.subheader("Select Threat Types")
-        threat_types = df['threat'].unique()
+        threat_types = df_filtered['threat'].unique()
         selected_threats = st.multiselect('Threat Types', threat_types, default=threat_types)
 
-        filtered_df = df[df['threat'].isin(selected_threats)]
+        filtered_df = df_filtered[df_filtered['threat'].isin(selected_threats)]
         filtered_df['threat_color'] = filtered_df['threat'].apply(get_threat_color)
 
         threat_layer = pdk.Layer(
