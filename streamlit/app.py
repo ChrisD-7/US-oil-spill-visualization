@@ -101,7 +101,7 @@ if option == 'Geospatial Visualization':
 
     # Impact analysis
     scaler = StandardScaler()
-    df['scaled_release_gallons'] = scaler.fit_transform(df[['max_ptl_release_gallons']]) * 1000
+    df['scaled_release_gallons'] = scaler.fit_transform(df[['max_ptl_release_gallons']]) * 10000 #adjust to make the visulizations better
     impact_layer = pdk.Layer(
         'ScatterplotLayer',
         data=df,
