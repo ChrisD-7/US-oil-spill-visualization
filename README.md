@@ -1,3 +1,6 @@
+## Update: Added slider to select the range of the year.
+
+
 # Interactive Incident Impact Analysis
 
 This project creates an interactive visualization of oil spill incidents using PyDeck. Inspired by the need for job-ready projects and the compelling map-based storytelling by Jonny Harris, this project uses a dataset from [Kaggle](https://www.kaggle.com/datasets/kkhandekar/oil-spills-off-us-coastal-waters/data).
@@ -102,6 +105,8 @@ Contributions are welcome. Please fork the repository, make your changes, and su
 
 - [PyDeck Example on Kaggle](https://www.kaggle.com/code/jeongbinpark/visualization-3d-map-using-pydeck)
 - [Kaggle Dataset](https://www.kaggle.com/datasets/kkhandekar/oil-spills-off-us-coastal-waters/data)
+
+## The HTML files are from the notebook.
 
 ## [Streamlit App](https://chris-dsilva-us-oil-spill-visualization.streamlit.app/)
 
