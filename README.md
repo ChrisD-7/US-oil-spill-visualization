@@ -1,4 +1,4 @@
-## Update: Added slider to select the range of the year.
+**## Update: Added slider to select the range of the year.**
 
 
 # Interactive Incident Impact Analysis
@@ -106,9 +106,11 @@ Contributions are welcome. Please fork the repository, make your changes, and su
 - [PyDeck Example on Kaggle](https://www.kaggle.com/code/jeongbinpark/visualization-3d-map-using-pydeck)
 - [Kaggle Dataset](https://www.kaggle.com/datasets/kkhandekar/oil-spills-off-us-coastal-waters/data)
 
-## The HTML files are from the notebook.
-
 ## [Streamlit App](https://chris-dsilva-us-oil-spill-visualization.streamlit.app/)
 
 
 ![alt text](video_demo/streamlit-app-demo-ezgif.com-video-to-gif-converter.gif)
+
+
+*The HTML files are interactive plots generated from the notebook.*
+
